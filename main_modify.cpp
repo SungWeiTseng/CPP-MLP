@@ -193,7 +193,7 @@ public:
 	}
 	void Save() {
 		fstream f;
-		f.open("C:/Users/Hi/Desktop/Identification/x64/Debug/Weight2.csv");
+		f.open("D:/School/Digital_image_processing/MLP/MLP/x64/Release/Weight.csv");
 		if (!f) {
 			cout << "¶}ÀÉ¥¢±Ñ" << endl;
 			return;
