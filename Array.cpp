@@ -9,69 +9,69 @@ Array::Array(const Array& other) :Data(NULL) {
 	free();
 	this->col = other.col;
 	this->row = other.row;
-	Data = new double*[col];
-	for (int i = 0; i < col; i++) {
-		Data[i] = new double[row];
-		for (int j = 0; j < row; j++) {
+	Data = new double*[row];
+	for (int i = 0; i < row; i++) {
+		Data[i] = new double[col];
+		for (int j = 0; j < col; j++) {
 			Data[i][j] = other.Data[i][j];
 		}
 	}
 }
-Array::Array(int col, int row) :Data(NULL) {
-	init(col, row);
+Array::Array(int row, int col) :Data(NULL) {
+	init(row, col);
 }
 Array::~Array() {
 	free();
 }
-void Array::init(int col, int row) {
+void Array::init(int row, int col) {
 	free();
 	this->col = col;
 	this->row = row;
-	Data = new double*[col];
-	for (int i = 0; i < col; i++) {
-		Data[i] = new double[row] {0};
+	Data = new double*[row];
+	for (int i = 0; i < row; i++) {
+		Data[i] = new double[col] {0};
 	}
 }
 Array Array::operator=(const Array& other) {
-	init(other.col, other.row);
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	init(other.row, other.col);
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			Data[i][j] = other.Data[i][j];
 		}
 	}
 	return *this;
 }
 Array Array::operator+(const Array& other) {
-	Array temp(col, row);
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	Array temp(row, col);
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			temp.Data[i][j] = Data[i][j] + other.Data[i][j];
 		}
 	}
 	return temp;
 }
 Array Array::operator-(const Array& other) {
-	Array temp(col, row);
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	Array temp(row, col);
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			temp.Data[i][j] = Data[i][j] - other.Data[i][j];
 		}
 	}
 	return temp;
 }
 Array Array::operator*(const Array& other) {
-	Array temp(col, row);
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	Array temp(row, col);
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			temp.Data[i][j] = Data[i][j] * other.Data[i][j];
 		}
 	}
 	return temp;
 }
 Array Array::transpose() {
-	Array temp(row, col);
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < col; j++) {
+	Array temp(col, row);
+	for (int i = 0; i < col; i++) {
+		for (int j = 0; j < row; j++) {
 			temp.Data[i][j] = Data[j][i];
 		}
 	}
@@ -79,17 +79,17 @@ Array Array::transpose() {
 }
 
 Array Array::operator*(double m) {
-	Array temp(col, row);
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	Array temp(row, col);
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			temp.Data[i][j] = Data[i][j] * m;
 		}
 	}
 	return temp;
 }
 Array Array::operator-=(const Array& other) {
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			Data[i][j] -= other.Data[i][j];
 		}
 	}
@@ -97,8 +97,8 @@ Array Array::operator-=(const Array& other) {
 }
 
 Array Array::operator+=(const Array& other) {
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			Data[i][j] += other.Data[i][j];
 		}
 	}
@@ -106,8 +106,8 @@ Array Array::operator+=(const Array& other) {
 }
 
 Array Array::operator*=(const Array& other) {
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			Data[i][j] *= other.Data[i][j];
 		}
 	}
@@ -115,8 +115,8 @@ Array Array::operator*=(const Array& other) {
 }
 
 Array Array::operator*=(double m) {
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
 			Data[i][j] *= m;
 		}
 	}
@@ -124,20 +124,20 @@ Array Array::operator*=(double m) {
 }
 Array Array::dot(const Array& other, bool T) {
 	if (T) {
-		Array temp(col, other.col);
-		for (int i = 0; i < col; i++) {
-			for (int j = 0; j < row; j++) {
-				for (int k = 0; k < other.col; k++) {
+		Array temp(row, other.row);
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				for (int k = 0; k < other.row; k++) {
 					temp.Data[i][k] += Data[i][j] * other.Data[k][j];
 				}
 			}
 		}
 		return temp;
 	}
-	Array temp(col, other.row);
-	for (int i = 0; i < col; i++) {
-		for (int j = 0; j < row; j++) {
-			for (int k = 0; k < other.row; k++) {
+	Array temp(row, other.col);
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			for (int k = 0; k < other.col; k++) {
 				temp.Data[i][k] += Data[i][j] * other.Data[j][k];
 			}
 		}
@@ -148,18 +148,18 @@ void Array::ones(int col, int row) {
 	free();
 	this->col = col;
 	this->row = row;
-	Data = new double*[col];
-	for (int i = 0; i < col; i++) {
-		Data[i] = new double[row];
-		for (int j = 0; j < row; j++) {
+	Data = new double*[row];
+	for (int i = 0; i < row; i++) {
+		Data[i] = new double[col];
+		for (int j = 0; j < col; j++) {
 			Data[i][j] = 1;
 		}
 	}
 }
 void Array::LoadData(const char path[], int nData, int features) {
 	free();
-	col = nData;
-	row = features;
+	col = features;
+	row = nData;
 	fstream file;
 	string line;
 	file.open(path);
@@ -195,7 +195,7 @@ void Array::LoadData(const char path[], int nData, int features) {
 }
 void Array::free() {
 	if (Data != NULL) {
-		for (int i = 0; i < col; i++) {
+		for (int i = 0; i < row; i++) {
 			delete[] Data[i];
 			Data[i] = NULL;
 		}

@@ -53,16 +53,16 @@ public:
 		}
 	}
 	Array encode(const Array& y) {
-		Array temp(n_output, y.row);
-		for (int i = 0; i < y.row; i++) {
+		Array temp(n_output, y.col);
+		for (int i = 0; i < y.col; i++) {
 			temp.Data[(int)y.Data[0][i]][i] = 1;
 		}
 		return temp;
 	}
 	Array sigmoid(const Array& z) {
-		Array temp(z.col, z.row);
-		for (int i = 0; i < z.col; i++) {
-			for (int j = 0; j < z.row; j++) {
+		Array temp(z.row, z.col);
+		for (int i = 0; i < z.row; i++) {
+			for (int j = 0; j < z.col; j++) {
 				temp.Data[i][j] = 1.0 / (1 + pow(M_E, -z.Data[i][j]));
 			}
 		}
@@ -70,23 +70,23 @@ public:
 	}
 	Array sigmoid_gradient(const Array& z) {
 		Array sg = sigmoid(z);
-		for (int i = 0; i < z.col; i++) {
-			for (int j = 0; j < z.row; j++) {
+		for (int i = 0; i < z.row; i++) {
+			for (int j = 0; j < z.col; j++) {
 				sg.Data[i][j] *= (1 - sg.Data[i][j]);
 			}
 		}
 		return sg;
 	}
 	Array softmax(const Array& z) {
-		Array temp(z.col, z.row);
-		Array total(1, z.row);
-		for (int i = 0; i < z.col; i++) {
-			for (int j = 0; j < z.row; j++) {
+		Array temp(z.row, z.col);
+		Array total(1, z.col);
+		for (int i = 0; i < z.row; i++) {
+			for (int j = 0; j < z.col; j++) {
 				total.Data[0][j] += pow(M_E, z.Data[i][j]);
 			}
 		}
-		for (int i = 0; i < z.col; i++) {
-			for (int j = 0; j < z.row; j++) {
+		for (int i = 0; i < z.row; i++) {
+			for (int j = 0; j < z.col; j++) {
 				temp.Data[i][j] = pow(M_E, z.Data[i][j]) / total.Data[0][j];
 			}
 		}
@@ -105,18 +105,18 @@ public:
 	Array addBias(const Array& X, int opt = 0) {
 		//opt 0:¥[¦æ 1:¥[¦C
 		if (opt == 0) {
-			Array newX(X.col, X.row + 1);
-			for (int i = 0; i < X.col; i++) {
+			Array newX(X.row, X.col + 1);
+			for (int i = 0; i < X.row; i++) {
 				newX.Data[i][0] = 1;
-				for (int j = 1; j < X.row + 1; j++) {
+				for (int j = 1; j < X.col + 1; j++) {
 					newX.Data[i][j] = X.Data[i][j - 1];
 				}
 			}
 			return newX;
 		}
-		Array newX(X.col + 1, X.row);
-		for (int i = 0; i < X.col + 1; i++) {
-			for (int j = 0; j < X.row; j++) {
+		Array newX(X.row + 1, X.col);
+		for (int i = 0; i < X.row + 1; i++) {
+			for (int j = 0; j < X.col; j++) {
 				if (i == 0)
 					newX.Data[i][j] = 1;
 				else newX.Data[i][j] = X.Data[i - 1][j];
@@ -133,9 +133,9 @@ public:
 		a3 = sigmoid(z3);
 	}
 	Array getLog(const Array& arr) {
-		Array logArr(arr.col, arr.row);
-		for (int i = 0; i < arr.col; i++) {
-			for (int j = 0; j < arr.row; j++) {
+		Array logArr(arr.row, arr.col);
+		for (int i = 0; i < arr.row; i++) {
+			for (int j = 0; j < arr.col; j++) {
 				logArr.Data[i][j] = log(arr.Data[i][j]);
 			}
 		}
@@ -143,8 +143,8 @@ public:
 	}
 	double sum(const Array& arr) {
 		double sum = 0;
-		for (int i = 0; i < arr.col; i++) {
-			for (int j = 0; j < arr.row; j++) {
+		for (int i = 0; i < arr.row; i++) {
+			for (int j = 0; j < arr.col; j++) {
 				sum += arr.Data[i][j];
 			}
 		}
@@ -153,8 +153,8 @@ public:
 	double getCost(Array& y_encode, const Array& output) {		
 		
 		double error = 0;
-		for (int i = 0; i < y_encode.col; i++) {
-			for (int j = 0; j < y_encode.row; j++) {
+		for (int i = 0; i < y_encode.row; i++) {
+			for (int j = 0; j < y_encode.col; j++) {
 				error += (y_encode.Data[i][j] - output.Data[i][j]) * (y_encode.Data[i][j] - output.Data[i][j]);
 			}
 		}
@@ -171,9 +171,9 @@ public:
 		Array temp = W2.transpose().dot(delta);	//(201, n)
 		Array g_z2 = sigmoid_gradient(z2);
 
-		grad1.init(temp.col - 1, temp.row);	//(200, n)
-		for (int i = 0; i < grad1.col; i++) {
-			for (int j = 0; j < grad1.row; j++) {
+		grad1.init(temp.row - 1, temp.col);	//(200, n)
+		for (int i = 0; i < grad1.row; i++) {
+			for (int j = 0; j < grad1.col; j++) {
 				grad1.Data[i][j] = temp.Data[i + 1][j] + g_z2.Data[i][j];
 			}
 		}
@@ -182,9 +182,9 @@ public:
 	}
 	Array predict(const Array& X) {
 		feedforward(X);
-		Array pred_y(1, a3.row);
-		for (int i = 1; i < a3.col; i++) {
-			for (int j = 0; j < a3.row; j++) {
+		Array pred_y(1, a3.col);
+		for (int i = 1; i < a3.row; i++) {
+			for (int j = 0; j < a3.col; j++) {
 				int t = (int)pred_y.Data[0][j];
 				pred_y.Data[0][j] = a3.Data[t][j] < a3.Data[i][j] ? i : t;
 			}
@@ -213,11 +213,11 @@ public:
 		f.close();
 	}
 	void fit(Array& X, Array& y) {
-		int batch_size = X.col / batch;
+		int batch_size = X.row / batch;
 		Array y_encode = encode(y);
-		Array delta_w1_prev(W1.col, W1.row);
-		Array delta_w2_prev(W2.col, W2.row);
-		Array tempX(batch_size, X.row);
+		Array delta_w1_prev(W1.row, W1.col);
+		Array delta_w2_prev(W2.row, W2.col);
+		Array tempX(batch_size, X.col);
 		Array tempY_en(n_output, batch_size);
 		Array grad1, grad2;
 		Array delta_w1;
@@ -270,8 +270,8 @@ int main() {
 	nn.fit(X, y);
 	nn.Save();
 	Array prey = nn.predict(X);
-	for (int i = 0; i < prey.col; i++) {
-		for (int j = 0; j < prey.row; j++) {
+	for (int i = 0; i < prey.row; i++) {
+		for (int j = 0; j < prey.col; j++) {
 			if (prey.Data[i][j] >= 10) {
 				cout << setw(2) << (char)(prey.Data[i][j] + 55) << " ";
 			}
@@ -286,7 +286,7 @@ int main() {
 		}
 		cout << endl;
 	}
-	for (int j = 0; j < y.row; j++) {
+	for (int j = 0; j < y.col; j++) {
 		if (y.Data[0][j] >= 10) {
 			cout << setw(2) << (char)(y.Data[0][j] + 55) << " ";
 		}
@@ -300,9 +300,9 @@ int main() {
 			cout << setw(2) << y.Data[0][j] << " ";
 	}
 	double sum = 0;
-	for (int i = 0; i < prey.col; i++) {
-		for (int j = 0; j < prey.row; j++) {
-			if (prey.Data[i][j] == y.Data[0][i * prey.row + j]) sum++;
+	for (int i = 0; i < prey.row; i++) {
+		for (int j = 0; j < prey.col; j++) {
+			if (prey.Data[i][j] == y.Data[0][i * prey.col + j]) sum++;
 		}
 	}
 	cout << endl << (sum / (NumOfData * 1.0)) * 100 << "%" << endl;
