@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 class Array
 {
 public:
@@ -24,4 +24,3 @@ public:
 	void ones(int row, int col);
 	void LoadData(const char path[], int nData, int features);
 };
-

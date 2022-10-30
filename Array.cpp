@@ -1,15 +1,15 @@
-#include "Array.h"
+ï»¿#include "Array.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 using namespace std;
 
 Array::Array() :Data(NULL), col(-1), row(-1) {}
-Array::Array(const Array& other) :Data(NULL) {
+Array::Array(const Array& other) : Data(NULL) {
 	free();
 	this->col = other.col;
 	this->row = other.row;
-	Data = new double*[row];
+	Data = new double* [row];
 	for (int i = 0; i < row; i++) {
 		Data[i] = new double[col];
 		for (int j = 0; j < col; j++) {
@@ -27,7 +27,7 @@ void Array::init(int row, int col) {
 	free();
 	this->col = col;
 	this->row = row;
-	Data = new double*[row];
+	Data = new double* [row];
 	for (int i = 0; i < row; i++) {
 		Data[i] = new double[col] {0};
 	}
@@ -144,11 +144,11 @@ Array Array::dot(const Array& other, bool T) {
 	}
 	return temp;
 }
-void Array::ones(int col, int row) {
+void Array::ones(int row, int col) {
 	free();
 	this->col = col;
 	this->row = row;
-	Data = new double*[row];
+	Data = new double* [row];
 	for (int i = 0; i < row; i++) {
 		Data[i] = new double[col];
 		for (int j = 0; j < col; j++) {
@@ -164,10 +164,10 @@ void Array::LoadData(const char path[], int nData, int features) {
 	string line;
 	file.open(path);
 	if (!file) {
-		cout << "ÅªÀÉ¥¢±Ñ" << endl;
+		cout << "file is not found" << endl;
 		return;
 	}
-	Data = new double*[nData];
+	Data = new double* [nData];
 	for (int i = 0; i < nData; i++) {
 		Data[i] = new double[features];
 		getline(file, line, '\n');
