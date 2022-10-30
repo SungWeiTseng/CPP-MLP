@@ -13,4 +13,4 @@
 
 - 車牌擷取
 <img src="https://github.com/SungWeiTseng/CPP-MLP/blob/main/images/vehicle_preprocess1.png"><br/>
-<img src="https://github.com/SungWeiTseng/CPP-MLP/blob/main/images/vehicle_preprocess2c.png"><br/>
+<img src="https://github.com/SungWeiTseng/CPP-MLP/blob/main/images/vehicle_preprocess2.png"><br/>
