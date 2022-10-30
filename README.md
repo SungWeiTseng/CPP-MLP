@@ -8,5 +8,5 @@
 <img src="https://github.com/SungWeiTseng/CPP-MLP/blob/main/images/training.png"><br/>
 - Training accuracy 81.85%
 <img src="https://github.com/SungWeiTseng/CPP-MLP/blob/main/images/training_acc.png"><br/>
-上面為Predict
+上面為Predict  
 下面為Ground Truth
